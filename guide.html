@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solidum - Гид</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: Arial, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { text-align: center; margin-bottom: 40px; }
+        h1 { color: #d4af37; font-size: 28px; margin-bottom: 10px; }
+        .tree-container { display: flex; flex-direction: column; align-items: center; margin: 40px 0; min-height: 300px; justify-content: center; }
+        .tree-emoji { font-size: 100px; animation: grow 4s ease-in-out infinite; }
+        @keyframes grow { 0% { transform: scale(0.5); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+        .guide-text { text-align: center; font-size: 20px; line-height: 1.6; margin: 20px 0; color: #d4af37; font-style: italic; max-width: 400px; }
+        .back-btn { background: none; border: 1px solid #d4af37; color: #d4af37; padding: 12px 24px; border-radius: 4px; cursor: pointer; margin-top: 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Solidum</h1>
+    </div>
+    <div class="tree-container">
+        <div class="tree-emoji">🌱</div>
+    </div>
+    <div class="guide-text">
+        <p id="guide-text">Истинската стойност не се създава за миг. Тя пуска корени. Solidum е вашата здрава почва.</p>
+    </div>
+    <div style="text-align: center;">
+        <button class="back-btn" onclick="window.location.href='index.html'" id="back-btn">← Назад</button>
+    </div>
+    <script>
+        const translations = {
+            bg: { guide: "Истинската стойност не се създава за миг. Тя пуска корени. Solidum е вашата здрава почва.", back: "← Назад" },
+            en: { guide: "True value is not created in an instant. It takes root. Solidum is your solid ground.", back: "← Back" },
+            ru: { guide: "Истинная ценность не создается мгновенно. Она пускает корни. Solidum — ваша надежная почва.", back: "← Назад" },
+            de: { guide: "Wahrer Wert entsteht nicht sofort. Er wurzelt. Solidum ist Ihr fester Boden.", back: "← Zurück" },
+            fr: { guide: "La vraie valeur ne se crée pas instantanément. Elle prend racine. Solidum est votre sol solide.", back: "← Retour" }
+        };
+        function setLang(lang) {
+            document.getElementById('guide-text').innerText = translations[lang].guide;
+            document.getElementById('back-btn').innerText = translations[lang].back;
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang') || 'bg';
+        setLang(lang);
+    </script>
+</body>
+</html>
