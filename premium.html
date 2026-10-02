@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solidum - Premium</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: Arial, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #d4af37; font-size: 28px; margin-bottom: 10px; }
+        .premium-container { width: 100%; max-width: 500px; }
+        .welcome-box { background-color: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #d4af37; margin-bottom: 20px; text-align: center; }
+        .welcome-box h2 { color: #d4af37; margin-top: 0; font-size: 22px; }
+        .expiry-info { font-size: 14px; color: #888; margin-top: 10px; }
+        .telegram-card { background-color: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #333; margin-bottom: 20px; text-align: center; }
+        .telegram-card h3 { color: #d4af37; margin-top: 0; }
+        .telegram-card p { font-size: 14px; color: #aaa; margin-bottom: 15px; }
+        .telegram-btn { display: inline-block; background-color: #0088cc; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; }
+        .strategy-card { background-color: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px; }
+        .strategy-card h3 { color: #d4af37; margin-top: 0; font-size: 18px; }
+        .strategy-card p { font-size: 14px; color: #ccc; line-height: 1.5; margin-bottom: 10px; }
+        .strategy-tag { display: inline-block; background-color: #2a2a2a; color: #d4af37; padding: 4px 10px; border-radius: 4px; font-size: 12px; margin-right: 5px; }
+        .locked-message { text-align: center; padding: 40px 20px; }
+        .locked-message h2 { color: #d4af37; }
+        .locked-message p { color: #aaa; margin-bottom: 20px; }
+        .locked-btn { background-color: #d4af37; color: #121212; border: none; padding: 15px 30px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .back-btn { background: none; border: 1px solid #d4af37; color: #d4af37; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-size: 16px; display: block; margin: 20px auto 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Solidum</h1>
+    </div>
+    
+    <div class="premium-container" id="premium-content" style="display: none;">
+        <div class="welcome-box">
+            <h2 id="welcome-title">Добре дошли в Premium</h2>
+            <p id="welcome-text">Вашият достъп до консервативни стратегии и реални активи е отключен.</p>
+            <p class="expiry-info" id="expiry-info">Вашият абонамент изтича на: --</p>
+        </div>
+
+        <div class="telegram-card">
+            <h3 id="telegram-title">Затворен Telegram канал</h3>
+            <p id="telegram-desc">Получавайте седмични анализи, стратегии и лични отговори директно от мен.</p>
+            <a href="https://t.me/YOUR_CHANNEL" target="_blank" class="telegram-btn" id="telegram-btn">Влез в канала</a>
+        </div>
+
+        <div class="strategy-card">
+            <h3 id="strategy1-title">Стратегия: Злато</h3>
+            <p id="strategy1-desc">Консервативна стратегия за дългосрочно задържане на дигитално злато (PAXG). Идеална за защита срещу инфлация.</p>
+            <div>
+                <span class="strategy-tag" id="tag1-low">Нисък риск</span>
+                <span class="strategy-tag" id="tag1-long">Дългосрочно</span>
+            </div>
+        </div>
+
+        <div class="strategy-card">
+            <h3 id="strategy2-title">Стратегия: Земя</h3>
+            <p id="strategy2-desc">Инвестиция в токенизирана земеделска земя. Стабилен доход от наем и растеж на стойността.</p>
+            <div>
+                <span class="strategy-tag" id="tag2-med">Среден риск</span>
+                <span class="strategy-tag" id="tag2-long">Дългосрочно</span>
+            </div>
+        </div>
+
+        <div class="strategy-card">
+            <h3 id="strategy3-title">Стратегия: Облигации</h3>
+            <p id="strategy3-desc">Дигитални държавни и корпоративни облигации. Редовен доход чрез лихвени плащания.</p>
+            <div>
+                <span class="strategy-tag" id="tag3-low">Нисък риск</span>
+                <span class="strategy-tag" id="tag3-income">Доход</span>
+            </div>
+        </div>
+
+        <button class="back-btn" onclick="window.location.href='index.html'" id="back-btn">← Назад</button>
+    </div>
+
+    <div class="premium-container" id="locked-content" style="display: none;">
+        <div class="locked-message">
+            <h2 id="locked-title">Premium съдържание</h2>
+            <p id="locked-text">Тази страница е достъпна само за активни абонати.</p>
+            <a href="payment.html" class="locked-btn" id="locked-btn">Активирай за $1</a>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            bg: { 
+                welcomeTitle: "Добре дошли в Premium", 
+                welcomeText: "Вашият достъп до консервативни стратегии и реални активи е отключен.",
+                expiryPrefix: "Вашият абонамент изтича на: ",
+                telegramTitle: "Затворен Telegram канал",
+                telegramDesc: "Получавайте седмични анализи, стратегии и лични отговори директно от мен.",
+                telegramBtn: "Влез в канала",
+                strategy1Title: "Стратегия: Злато",
+                strategy1Desc: "Консервативна стратегия за дългосрочно задържане на дигитално злато (PAXG). Идеална за защита срещу инфлация.",
+                strategy2Title: "Стратегия: Земя",
+                strategy2Desc: "Инвестиция в токенизирана земеделска земя. Стабилен доход от наем и растеж на стойността.",
+                strategy3Title: "Стратегия: Облигации",
+                strategy3Desc: "Дигитални държавни и корпоративни облигации. Редовен доход чрез лихвени плащания.",
+                tagLow: "Нисък риск", tagMed: "Среден риск", tagLong: "Дългосрочно", tagIncome: "Доход",
+                lockedTitle: "Premium съдържание",
+                lockedText: "Тази страница е достъпна само за активни абонати.",
+                lockedBtn: "Активирай за $1",
+                back: "← Назад"
+            },
+            en: { 
+                welcomeTitle: "Welcome to Premium", 
+                welcomeText: "Your access to conservative strategies and real assets is unlocked.",
+                expiryPrefix: "Your subscription expires on: ",
+                telegramTitle: "Private Telegram Channel",
+                telegramDesc: "Get weekly analyses, strategies, and personal answers directly from me.",
+                telegramBtn: "Join the channel",
+                strategy1Title: "Strategy: Gold",
+                strategy1Desc: "Conservative strategy for long-term holding of digital gold (PAXG). Ideal for inflation protection.",
+                strategy2Title: "Strategy: Land",
+                strategy2Desc: "Investment in tokenized agricultural land. Stable income from rent and value growth.",
+                strategy3Title: "Strategy: Bonds",
+                strategy3Desc: "Digital government and corporate bonds. Regular income through interest payments.",
+                tagLow: "Low risk", tagMed: "Medium risk", tagLong: "Long-term", tagIncome: "Income",
+                lockedTitle: "Premium Content",
+                lockedText: "This page is only accessible to active subscribers.",
+                lockedBtn: "Activate for $1",
+                back: "← Back"
+            },
+            ru: { 
+                welcomeTitle: "Добро пожаловать в Premium", 
+                welcomeText: "Ваш доступ к консервативным стратегиям и реальным активам открыт.",
+                expiryPrefix: "Ваша подписка истекает: ",
+                telegramTitle: "Закрытый Telegram канал",
+                telegramDesc: "Получайте еженедельные анализы, стратегии и личные ответы напрямую от меня.",
+                telegramBtn: "Войти в канал",
+                strategy1Title: "Стратегия: Золото",
+                strategy1Desc: "Консервативная стратегия долгосрочного удержания цифрового золота (PAXG). Идеальна для защиты от инфляции.",
+                strategy2Title: "Стратегия: Земля",
+                strategy2Desc: "Инвестиции в токенизированную сельскохозяйственную землю. Стабильный доход от аренды и роста стоимости.",
+                strategy3Title: "Стратегия: Облигации",
+                strategy3Desc: "Цифровые государственные и корпоративные облигации. Регулярный доход через процентные выплаты.",
+                tagLow: "Низкий риск", tagMed: "Средний риск", tagLong: "Долгосрочно", tagIncome: "Доход",
+                lockedTitle: "Premium контент",
+                lockedText: "Эта страница доступна только активным подписчикам.",
+                lockedBtn: "Активировать за $1",
+                back: "← Назад"
+            },
+            de: { 
+                welcomeTitle: "Willkommen bei Premium", 
+                welcomeText: "Ihr Zugang zu konservativen Strategien und realen Vermögenswerten ist freigeschaltet.",
+                expiryPrefix: "Ihr Abonnement läuft ab am: ",
+                telegramTitle: "Privater Telegram-Kanal",
+                telegramDesc: "Erhalten Sie wöchentliche Analysen, Strategien und persönliche Antworten direkt von mir.",
+                telegramBtn: "Kanal beitreten",
+                strategy1Title: "Strategie: Gold",
+                strategy1Desc: "Konservative Strategie für langfristiges Halten von digitalem Gold (PAXG). Ideal zum Inflationsschutz.",
+                strategy2Title: "Strategie: Land",
+                strategy2Desc: "Investition in tokenisiertes Agrarland. Stabiles Einkommen aus Miete und Wertsteigerung.",
+                strategy3Title: "Strategie: Anleihen",
+                strategy3Desc: "Digitale Staats- und Unternehmensanleihen. Regelmäßiges Einkommen durch Zinszahlungen.",
+                tagLow: "Niedriges Risiko", tagMed: "Mittleres Risiko", tagLong: "Langfristig", tagIncome: "Einkommen",
+                lockedTitle: "Premium-Inhalte",
+                lockedText: "Diese Seite ist nur für aktive Abonnenten zugänglich.",
+                lockedBtn: "Für $1 aktivieren",
+                back: "← Zurück"
+            },
+            fr: { 
+                welcomeTitle: "Bienvenue dans Premium", 
+                welcomeText: "Votre accès aux stratégies conservatrices et aux actifs réels est débloqué.",
+                expiryPrefix: "Votre abonnement expire le: ",
+                telegramTitle: "Canal Telegram privé",
+                telegramDesc: "Recevez des analyses hebdomadaires, des stratégies et des réponses personnelles directement de moi.",
+                telegramBtn: "Rejoindre le canal",
+                strategy1Title: "Stratégie: Or",
+                strategy1Desc: "Stratégie conservatrice pour la détention à long terme d'or numérique (PAXG). Idéale pour la protection contre l'inflation.",
+                strategy2Title: "Stratégie: Terre",
+                strategy2Desc: "Investissement dans des terres agricoles tokenisées. Revenu stable grâce aux loyers et à la croissance de la valeur.",
+                strategy3Title: "Stratégie: Obligations",
+                strategy3Desc: "Obligations d'État et d'entreprise numériques. Revenu régulier grâce aux paiements d'intérêts.",
+                tagLow: "Risque faible", tagMed: "Risque moyen", tagLong: "Long terme", tagIncome: "Revenu",
+                lockedTitle: "Contenu Premium",
+                lockedText: "Cette page n'est accessible qu'aux abonnés actifs.",
+                lockedBtn: "Activer pour $1",
+                back: "← Retour"
+            }
+        };
+
+        let currentLang = 'bg';
+
+        function setLang(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            document.getElementById('welcome-title').innerText = t.welcomeTitle;
+            document.getElementById('welcome-text').innerText = t.welcomeText;
+            document.getElementById('telegram-title').innerText = t.telegramTitle;
+            document.getElementById('telegram-desc').innerText = t.telegramDesc;
+            document.getElementById('telegram-btn').innerText = t.telegramBtn;
+            document.getElementById('strategy1-title').innerText = t.strategy1Title;
+            document.getElementById('strategy1-desc').innerText = t.strategy1Desc;
+            document.getElementById('strategy2-title').innerText = t.strategy2Title;
+            document.getElementById('strategy2-desc').innerText = t.strategy2Desc;
+            document.getElementById('strategy3-title').innerText = t.strategy3Title;
+            document.getElementById('strategy3-desc').innerText = t.strategy3Desc;
+            document.getElementById('tag1-low').innerText = t.tagLow;
+            document.getElementById('tag1-long').innerText = t.tagLong;
+            document.getElementById('tag2-med').innerText = t.tagMed;
+            document.getElementById('tag2-long').innerText = t.tagLong;
+            document.getElementById('tag3-low').innerText = t.tagLow;
+            document.getElementById('tag3-income').innerText = t.tagIncome;
+            document.getElementById('locked-title').innerText = t.lockedTitle;
+            document.getElementById('locked-text').innerText = t.lockedText;
+            document.getElementById('locked-btn').innerText = t.lockedBtn;
+            document.getElementById('back-btn').innerText = t.back;
+        }
+
+        function checkAccess() {
+            const premiumExpiry = localStorage.getItem('solidumPremium');
+            const t = translations[currentLang];
+            
+            if (premiumExpiry && new Date(premiumExpiry) > new Date()) {
+                document.getElementById('premium-content').style.display = 'block';
+                document.getElementById('locked-content').style.display = 'none';
+                
+                const expiryDate = new Date(premiumExpiry);
+                const formatted = expiryDate.toLocaleDateString(currentLang === 'bg' ? 'bg-BG' : currentLang);
+                document.getElementById('expiry-info').innerText = t.expiryPrefix + formatted;
+            } else {
+                document.getElementById('premium-content').style.display = 'none';
+                document.getElementById('locked-content').style.display = 'block';
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang') || 'bg';
+        setLang(lang);
+        checkAccess();
+    </script>
+</body>
+</html>
