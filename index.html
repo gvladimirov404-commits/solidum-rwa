@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solidum</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: Arial, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { text-align: center; margin-bottom: 40px; }
+        h1 { color: #d4af37; font-size: 28px; margin-bottom: 10px; }
+        .lang-switch { margin-top: 10px; }
+        .lang-switch button { background: none; border: 1px solid #d4af37; color: #d4af37; padding: 5px 10px; margin: 2px; cursor: pointer; border-radius: 4px; }
+        .lang-switch button.active { background: #d4af37; color: #121212; }
+        .main-text { text-align: center; max-width: 600px; margin-bottom: 40px; font-size: 18px; line-height: 1.5; }
+        .buttons { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 300px; }
+        .btn { background-color: #d4af37; color: #121212; border: none; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; text-align: center; }
+        .btn-premium { background-color: #1e1e1e; color: #d4af37; border: 2px solid #d4af37; }
+        .btn-info { background-color: #1e1e1e; color: #e0e0e0; border: 1px solid #555; }
+        .btn-vip { background-color: #2a1f00; color: #d4af37; border: 2px solid #d4af37; }
+        .footer { margin-top: auto; padding-top: 40px; font-size: 12px; color: #888; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Solidum</h1>
+        <div class="lang-switch">
+            <button onclick="setLang('bg')" class="active">BG</button>
+            <button onclick="setLang('en')">EN</button>
+            <button onclick="setLang('ru')">RU</button>
+            <button onclick="setLang('de')">DE</button>
+            <button onclick="setLang('fr')">FR</button>
+        </div>
+    </div>
+    <div class="main-text">
+        <p id="title">Вашият сигурен мост към реална стойност.</p>
+        <p id="desc">Превърнете спестяванията си в злато, земя и стабилност – без сложност, дори с малка сума.</p>
+    </div>
+    <div class="buttons">
+        <button class="btn" id="btn1" onclick="window.location.href='guide.html?lang=bg'">🌱 Разбери как работи</button>
+        <button class="btn" id="btn2" onclick="window.location.href='calculator.html?lang=bg'">📊 Виж стойността</button>
+        <button class="btn btn-premium" id="btn3" onclick="window.location.href='payment.html?lang=bg'">💎 Premium - $1/месец</button>
+        <button class="btn btn-info" id="btn4" onclick="window.location.href='whitelist.html?lang=bg'">🏦 Къде да купя USDT</button>
+        <button class="btn btn-vip" id="btn5" onclick="window.location.href='premium.html?lang=bg'" style="display: none;">👑 Моят Premium</button>
+    </div>
+    <div class="footer">
+        <p id="footer">🔒 Вашите данни са защитени.</p>
+    </div>
+    <script>
+        const translations = {
+            bg: { title: "Вашият сигурен мост към реална стойност.", desc: "Превърнете спестяванията си в злато, земя и стабилност – без сложност, дори с малка сума.", btn1: " Разбери как работи", btn2: "📊 Виж стойността", btn3: "💎 Premium - $1/месец", btn4: "🏦 Къде да купя USDT", btn5: "👑 Моят Premium", footer: "🔒 Вашите данни са защитени." },
+            en: { title: "Your secure bridge to real value.", desc: "Turn your savings into gold, land, and stability – without complexity, even with a small amount.", btn1: " Understand how it works", btn2: " See the value", btn3: "💎 Premium - $1/month", btn4: " Where to buy USDT", btn5: " My Premium", footer: " Your data is protected." },
+            ru: { title: "Ваш надежный мост к реальной ценности.", desc: "Превратите свои сбережения в золото, землю и стабильность – без сложностей, даже с небольшой суммой.", btn1: "🌱 Узнайте, как это работает", btn2: "📊 Оцените ценность", btn3: "💎 Premium - $1/месяц", btn4: "🏦 Где купить USDT", btn5: "👑 Мой Premium", footer: "🔒 Ваши данные защищены." },
+            de: { title: "Ihre sichere Brücke zu echtem Wert.", desc: "Verwandeln Sie Ihre Ersparnisse in Gold, Land und Stabilität – ohne Komplexität, schon mit einem kleinen Betrag.", btn1: "🌱 Verstehen Sie, wie es funktioniert", btn2: "📊 Sehen Sie den Wert", btn3: "💎 Premium - $1/Monat", btn4: "🏦 Wo USDT kaufen", btn5: "👑 Mein Premium", footer: "🔒 Ihre Daten sind geschützt." },
+            fr: { title: "Votre pont sécurisé vers la valeur réelle.", desc: "Transformez vos économies en or, terre et stabilité – sans complexité, même avec un petit montant.", btn1: " Comprendre comment ça marche", btn2: "📊 Voir la valeur", btn3: " Premium - $1/mois", btn4: "🏦 Où acheter des USDT", btn5: "👑 Mon Premium", footer: " Vos données sont protégées." }
+        };
+        function setLang(lang) {
+            document.getElementById('title').innerText = translations[lang].title;
+            document.getElementById('desc').innerText = translations[lang].desc;
+            document.getElementById('btn1').innerText = translations[lang].btn1;
+            document.getElementById('btn2').innerText = translations[lang].btn2;
+            document.getElementById('btn3').innerText = translations[lang].btn3;
+            document.getElementById('btn4').innerText = translations[lang].btn4;
+            document.getElementById('btn5').innerText = translations[lang].btn5;
+            document.getElementById('footer').innerText = translations[lang].footer;
+            document.querySelectorAll('.lang-switch button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('btn1').onclick = function() { window.location.href = 'guide.html?lang=' + lang; };
+            document.getElementById('btn2').onclick = function() { window.location.href = 'calculator.html?lang=' + lang; };
+            document.getElementById('btn3').onclick = function() { window.location.href = 'payment.html?lang=' + lang; };
+            document.getElementById('btn4').onclick = function() { window.location.href = 'whitelist.html?lang=' + lang; };
+            document.getElementById('btn5').onclick = function() { window.location.href = 'premium.html?lang=' + lang; };
+        }
+        function checkPremiumAccess() {
+            const premiumExpiry = localStorage.getItem('solidumPremium');
+            if (premiumExpiry && new Date(premiumExpiry) > new Date()) {
+                document.getElementById('btn5').style.display = 'block';
+            }
+        }
+        checkPremiumAccess();
+    </script>
+</body>
+</html>
