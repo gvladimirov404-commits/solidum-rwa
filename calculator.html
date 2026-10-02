@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solidum - Калкулатор</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: Arial, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #d4af37; font-size: 28px; margin-bottom: 10px; }
+        .calc-container { width: 100%; max-width: 400px; text-align: center; }
+        .slider { width: 100%; margin: 20px 0; accent-color: #d4af37; }
+        .amount-display { font-size: 24px; color: #d4af37; font-weight: bold; margin-bottom: 30px; }
+        .results { display: flex; flex-direction: column; gap: 20px; margin-bottom: 30px; }
+        .result-box { background-color: #1e1e1e; padding: 15px; border-radius: 8px; border: 1px solid #333; }
+        .result-box h3 { margin: 0 0 10px 0; font-size: 16px; color: #888; }
+        .result-box p { margin: 0; font-size: 20px; color: #e0e0e0; }
+        .result-box.solidum { border-color: #d4af37; }
+        .result-box.solidum p { color: #d4af37; }
+        .back-btn { background: none; border: 1px solid #d4af37; color: #d4af37; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Solidum</h1>
+    </div>
+    
+    <div class="calc-container">
+        <p id="slider-label">Изберете сума за инвестиция:</p>
+        <input type="range" min="50" max="1000" value="100" class="slider" id="amount" oninput="updateCalc()">
+        <div class="amount-display"><span id="amount-val">100</span> <span id="currency">лв.</span></div>
+        
+        <div class="results">
+            <div class="result-box">
+                <h3 id="bank-title">В банка (след 5 години)</h3>
+                <p><span id="bank-val">110</span> <span id="currency2">лв.</span></p>
+            </div>
+            <div class="result-box solidum">
+                <h3 id="solidum-title">В Solidum (след 5 години)</h3>
+                <p><span id="solidum-val">146</span> <span id="currency3">лв.</span></p>
+            </div>
+        </div>
+        
+        <button class="back-btn" onclick="window.location.href='index.html'" id="back-btn">← Назад</button>
+    </div>
+
+    <script>
+        const translations = {
+            bg: { label: "Изберете сума за инвестиция:", currency: "лв.", bankTitle: "В банка (след 5 години)", solidumTitle: "В Solidum (след 5 години)", back: "← Назад" },
+            en: { label: "Choose an investment amount:", currency: "USD", bankTitle: "In Bank (after 5 years)", solidumTitle: "In Solidum (after 5 years)", back: "← Back" },
+            ru: { label: "Выберите сумму для инвестиций:", currency: "USD", bankTitle: "В банке (через 5 лет)", solidumTitle: "В Solidum (через 5 лет)", back: "← Назад" },
+            de: { label: "Wählen Sie einen Investitionsbetrag:", currency: "EUR", bankTitle: "Auf der Bank (nach 5 Jahren)", solidumTitle: "In Solidum (nach 5 Jahren)", back: "← Zurück" },
+            fr: { label: "Choisissez un montant d'investissement:", currency: "EUR", bankTitle: "En banque (après 5 ans)", solidumTitle: "Dans Solidum (après 5 ans)", back: "← Retour" }
+        };
+
+        function updateCalc() {
+            const amount = document.getElementById('amount').value;
+            document.getElementById('amount-val').innerText = amount;
+            // Проста математика за демонстрация: Банка = 2% лихва, Solidum = 8% растеж
+            document.getElementById('bank-val').innerText = Math.round(amount * 1.10); 
+            document.getElementById('solidum-val').innerText = Math.round(amount * 1.46);
+        }
+
+        function setLang(lang) {
+            const t = translations[lang];
+            document.getElementById('slider-label').innerText = t.label;
+            document.getElementById('currency').innerText = t.currency;
+            document.getElementById('currency2').innerText = t.currency;
+            document.getElementById('currency3').innerText = t.currency;
+            document.getElementById('bank-title').innerText = t.bankTitle;
+            document.getElementById('solidum-title').innerText = t.solidumTitle;
+            document.getElementById('back-btn').innerText = t.back;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang') || 'bg';
+        setLang(lang);
+        updateCalc();
+    </script>
+</body>
+</html>
