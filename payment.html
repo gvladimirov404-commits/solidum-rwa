@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solidum - Плащане</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: Arial, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #d4af37; font-size: 28px; margin-bottom: 10px; }
+        .payment-container { width: 100%; max-width: 400px; text-align: center; }
+        .price-box { background-color: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #d4af37; margin-bottom: 20px; }
+        .price { font-size: 32px; color: #d4af37; font-weight: bold; margin: 10px 0; }
+        .price-note { font-size: 14px; color: #888; }
+        .discount-badge { background-color: #4caf50; color: white; padding: 4px 12px; border-radius: 12px; font-size: 14px; font-weight: bold; display: inline-block; margin-top: 5px; }
+        .address-box { background-color: #1e1e1e; padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 20px; }
+        .address-label { font-size: 14px; color: #888; margin-bottom: 10px; }
+        .address { font-size: 13px; color: #d4af37; font-family: monospace; word-break: break-all; margin-bottom: 10px; }
+        .copy-btn { background: none; border: 1px solid #d4af37; color: #d4af37; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .copy-btn.copied { background-color: #d4af37; color: #121212; }
+        .referral-input { width: 100%; padding: 12px; background-color: #1e1e1e; border: 1px solid #333; border-radius: 8px; color: #e0e0e0; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; text-align: center; }
+        .referral-input:read-only { background-color: #2a2a2a; color: #d4af37; border-color: #d4af37; }
+        .referral-input::placeholder { color: #666; }
+        .pay-btn { background-color: #d4af37; color: #121212; border: none; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-bottom: 20px; }
+        .pay-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .status { padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; }
+        .status.success { background-color: #1e3a1e; border: 1px solid #4caf50; color: #4caf50; display: block; }
+        .status.error { background-color: #3a1e1e; border: 1px solid #f44336; color: #f44336; display: block; }
+        .status.waiting { background-color: #1e1e3a; border: 1px solid #2196f3; color: #2196f3; display: block; }
+        .back-btn { background: none; border: 1px solid #d4af37; color: #d4af37; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Solidum</h1>
+    </div>
+    
+    <div class="payment-container">
+        <div class="price-box">
+            <p id="price-label">Premium достъп за 1 месец</p>
+            <div class="price" id="price">$1 USDT</div>
+            <div id="discount-badge" class="discount-badge" style="display: none;">20% ОТСТЪПКА</div>
+            <p class="price-note" id="price-note">TRC20 мрежа</p>
+        </div>
+
+        <div class="address-box">
+            <p class="address-label" id="address-label">Изпратете точната сума на този адрес:</p>
+            <p class="address" id="crypto-address">TWKhQbamU7r4C2fKW1uSqfksJBcp2zpyFc</p>
+            <button class="copy-btn" id="copy-btn" onclick="copyAddress()">Копирай адреса</button>
+        </div>
+
+        <input type="text" class="referral-input" id="referral-code" placeholder="Реферален код (по желание)">
+
+        <button class="pay-btn" id="pay-btn" onclick="checkPayment()">Провери плащането</button>
+
+        <div class="status" id="status"></div>
+
+        <button class="back-btn" onclick="window.location.href='index.html'" id="back-btn">← Назад</button>
+    </div>
+
+    <script>
+        const translations = {
+            bg: { priceLabel: "Premium достъп за 1 месец", priceNote: "TRC20 мрежа", addressLabel: "Изпратете точната сума на този адрес:", referralPlaceholder: "Реферален код (по желание)", payBtn: "Провери плащането", back: "← Назад", success: "Плащането е потвърдено! Достъпът ви е активен за 30 дни.", error: "Плащането не е намерено. Уверете се, че изпратихте точната сума и опитайте отново.", waiting: "Проверка на блокчейна...", copy: "Копирай адреса", copied: "Копирано!", discount: "20% ОТСТЪПКА" },
+            en: { priceLabel: "Premium access for 1 month", priceNote: "TRC20 network", addressLabel: "Send the exact amount to this address:", referralPlaceholder: "Referral code (optional)", payBtn: "Check payment", back: "← Back", success: "Payment confirmed! Your access is active for 30 days.", error: "Payment not found. Ensure you sent the exact amount and try again.", waiting: "Checking blockchain...", copy: "Copy address", copied: "Copied!", discount: "20% DISCOUNT" },
+            ru: { priceLabel: "Premium доступ на 1 месяц", priceNote: "Сеть TRC20", addressLabel: "Отправьте точную сумму на этот адрес:", referralPlaceholder: "Реферальный код (необязательно)", payBtn: "Проверить платеж", back: "← Назад", success: "Платеж подтвержден! Ваш доступ активен на 30 дней.", error: "Платеж не найден. Убедитесь, что отправили точную сумму.", waiting: "Проверка блокчейна...", copy: "Копировать адрес", copied: "Скопировано!", discount: "СКИДКА 20%" },
+            de: { priceLabel: "Premium-Zugang für 1 Monat", priceNote: "TRC20-Netzwerk", addressLabel: "Senden Sie den genauen Betrag an diese Adresse:", referralPlaceholder: "Empfehlungscode (optional)", payBtn: "Zahlung prüfen", back: "← Zurück", success: "Zahlung bestätigt! Ihr Zugang ist 30 Tage aktiv.", error: "Zahlung nicht gefunden. Stellen Sie sicher, dass Sie den genauen Betrag gesendet haben.", waiting: "Blockchain wird geprüft...", copy: "Adresse kopieren", copied: "Kopiert!", discount: "20% RABATT" },
+            fr: { priceLabel: "Accès Premium pour 1 mois", priceNote: "Réseau TRC20", addressLabel: "Envoyez le montant exact à cette adresse:", referralPlaceholder: "Code de parrainage (optionnel)", payBtn: "Vérifier le paiement", back: "← Retour", success: "Paiement confirmé! Votre accès est actif pendant 30 jours.", error: "Paiement non trouvé. Assurez-vous d'avoir envoyé le montant exact.", waiting: "Vérification de la blockchain...", copy: "Copier l'adresse", copied: "Copié!", discount: "20% DE RÉDUCTION" }
+        };
+
+        const YOUR_CRYPTO_ADDRESS = "TWKhQbamU7r4C2fKW1uSqfksJBcp2zpyFc";
+        const USDT_CONTRACT = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
+        let currentLang = 'bg';
+        let expectedAmount = 1000000; // 1.0 USDT по подразбиране (6 десетични знака)
+
+        function copyAddress() {
+            navigator.clipboard.writeText(YOUR_CRYPTO_ADDRESS).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.innerText = translations[currentLang].copied;
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerText = translations[currentLang].copy;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('price-label').innerText = t.priceLabel;
+            document.getElementById('price-note').innerText = t.priceNote;
+            document.getElementById('address-label').innerText = t.addressLabel;
+            document.getElementById('referral-code').placeholder = t.referralPlaceholder;
+            document.getElementById('pay-btn').innerText = t.payBtn;
+            document.getElementById('back-btn').innerText = t.back;
+            document.getElementById('copy-btn').innerText = t.copy;
+            if (document.getElementById('discount-badge').style.display !== 'none') {
+                document.getElementById('discount-badge').innerText = t.discount;
+            }
+        }
+
+        async function checkPayment() {
+            const statusDiv = document.getElementById('status');
+            const payBtn = document.getElementById('pay-btn');
+            const t = translations[currentLang];
+            
+            statusDiv.className = 'status waiting';
+            statusDiv.innerText = t.waiting;
+            payBtn.disabled = true;
+
+            try {
+                const url = `https://api.trongrid.io/v1/accounts/${YOUR_CRYPTO_ADDRESS}/transactions/trc20?contract_address=${USDT_CONTRACT}&limit=20&order_by=block_timestamp,desc`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                let paymentFound = false;
+
+                if (data.data && data.data.length > 0) {
+                    for (let tx of data.data) {
+                        // Проверяваме дали получател е нашият адрес И сумата съвпада с очакваната (1.0 или 0.8 USDT)
+                        if (tx.to === YOUR_CRYPTO_ADDRESS && parseInt(tx.value) === expectedAmount) {
+                            paymentFound = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (paymentFound) {
+                    statusDiv.className = 'status success';
+                    statusDiv.innerText = t.success;
+                    const expiryDate = new Date();
+                    expiryDate.setDate(expiryDate.getDate() + 30);
+                    localStorage.setItem('solidumPremium', expiryDate.toISOString());
+                } else {
+                    statusDiv.className = 'status error';
+                    statusDiv.innerText = t.error;
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.innerText = t.error;
+            } finally {
+                payBtn.disabled = false;
+            }
+        }
+
+        // Инициализация
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang') || 'bg';
+        const refCode = urlParams.get('ref');
+
+        setLang(lang);
+
+        // Логика за реферална отстъпка
+        if (refCode) {
+            expectedAmount = 800000; // 0.8 USDT (20% отстъпка)
+            document.getElementById('price').innerText = "$0.80 USDT";
+            document.getElementById('discount-badge').style.display = 'inline-block';
+            document.getElementById('discount-badge').innerText = translations[lang].discount;
+            
+            const refInput = document.getElementById('referral-code');
+            refInput.value = refCode;
+            refInput.readOnly = true; // Заключваме полето, за да не се променя
+        }
+
+        // Проверка за вече активен абонамент
+        const premiumExpiry = localStorage.getItem('solidumPremium');
+        if (premiumExpiry && new Date(premiumExpiry) > new Date()) {
+            document.getElementById('price-label').innerText = "Имате активен Premium достъп";
+            document.getElementById('price').innerText = "✅ Активен";
+            document.getElementById('discount-badge').style.display = 'none';
+            document.getElementById('pay-btn').disabled = true;
+            document.getElementById('pay-btn').innerText = "Активен до " + new Date(premiumExpiry).toLocaleDateString();
+            document.getElementById('referral-code').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
