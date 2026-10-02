@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solidum - Бял списък</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: Arial, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #d4af37; font-size: 28px; margin-bottom: 10px; }
+        .whitelist-container { width: 100%; max-width: 500px; }
+        .intro { text-align: center; font-size: 16px; line-height: 1.5; margin-bottom: 30px; color: #ccc; }
+        .exchange-card { background-color: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #333; margin-bottom: 20px; }
+        .exchange-name { font-size: 20px; color: #d4af37; font-weight: bold; margin-bottom: 10px; }
+        .exchange-desc { font-size: 14px; color: #aaa; margin-bottom: 15px; line-height: 1.4; }
+        .exchange-link { display: inline-block; background-color: #d4af37; color: #121212; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .steps { background-color: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #d4af37; margin-bottom: 30px; }
+        .steps h3 { color: #d4af37; margin-top: 0; font-size: 18px; }
+        .steps ol { padding-left: 20px; margin: 0; }
+        .steps li { margin-bottom: 10px; font-size: 14px; line-height: 1.4; color: #ccc; }
+        .back-btn { background: none; border: 1px solid #d4af37; color: #d4af37; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-size: 16px; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Solidum</h1>
+    </div>
+    
+    <div class="whitelist-container">
+        <p class="intro" id="intro">Преди да влезете в Solidum, трябва да превърнете вашите лева/евро в USDT. Ето проверени и сигурни места, където да го направите:</p>
+
+        <div class="steps">
+            <h3 id="steps-title">Как да купите USDT:</h3>
+            <ol id="steps-list">
+                <li>Регистрирайте се в една от борсите по-долу.</li>
+                <li>Потвърдете самоличността си (KYC).</li>
+                <li>Депозирайте лева/евро чрез банков превод или карта.</li>
+                <li>Купете USDT (TRC20 мрежа).</li>
+                <li>Изтеглете USDT към адреса, който Solidum ще ви даде.</li>
+            </ol>
+        </div>
+
+        <div class="exchange-card">
+            <div class="exchange-name">Binance</div>
+            <div class="exchange-desc" id="binance-desc">Най-голямата крипто борса в света. Поддържа депозити с карта и банков превод. Ниски такси.</div>
+            <a href="https://www.binance.com" target="_blank" class="exchange-link" id="binance-link">Отвори Binance</a>
+        </div>
+
+        <div class="exchange-card">
+            <div class="exchange-name">Kraken</div>
+            <div class="exchange-desc" id="kraken-desc">Сигурна европейска борса. Поддържа SEPA преводи в евро. Много ниски такси за банкови преводи.</div>
+            <a href="https://www.kraken.com" target="_blank" class="exchange-link" id="kraken-link">Отвори Kraken</a>
+        </div>
+
+        <div class="exchange-card">
+            <div class="exchange-name">Bitpanda</div>
+            <div class="exchange-desc" id="bitpanda-desc">Австрийска борса, регулирана в ЕС. Много лесна за начинаещи. Поддържа депозити с карта и банков превод.</div>
+            <a href="https://www.bitpanda.com" target="_blank" class="exchange-link" id="bitpanda-link">Отвори Bitpanda</a>
+        </div>
+
+        <button class="back-btn" onclick="window.location.href='index.html'" id="back-btn">← Назад</button>
+    </div>
+
+    <script>
+        const translations = {
+            bg: { 
+                intro: "Преди да влезете в Solidum, трябва да превърнете вашите лева/евро в USDT. Ето проверени и сигурни места, където да го направите:",
+                stepsTitle: "Как да купите USDT:",
+                steps: ["Регистрирайте се в една от борсите по-долу.", "Потвърдете самоличността си (KYC).", "Депозирайте лева/евро чрез банков превод или карта.", "Купете USDT (TRC20 мрежа).", "Изтеглете USDT към адреса, който Solidum ще ви даде."],
+                binanceDesc: "Най-голямата крипто борса в света. Поддържа депозити с карта и банков превод. Ниски такси.",
+                krakenDesc: "Сигурна европейска борса. Поддържа SEPA преводи в евро. Много ниски такси за банкови преводи.",
+                bitpandaDesc: "Австрийска борса, регулирана в ЕС. Много лесна за начинаещи. Поддържа депозити с карта и банков превод.",
+                binanceLink: "Отвори Binance",
+                krakenLink: "Отвори Kraken",
+                bitpandaLink: "Отвори Bitpanda",
+                back: "← Назад"
+            },
+            en: { 
+                intro: "Before entering Solidum, you need to convert your fiat currency to USDT. Here are trusted and secure places to do it:",
+                stepsTitle: "How to buy USDT:",
+                steps: ["Sign up at one of the exchanges below.", "Verify your identity (KYC).", "Deposit fiat via bank transfer or card.", "Buy USDT (TRC20 network).", "Withdraw USDT to the address Solidum will give you."],
+                binanceDesc: "The world's largest crypto exchange. Supports card and bank deposits. Low fees.",
+                krakenDesc: "Secure European exchange. Supports SEPA transfers in EUR. Very low fees for bank transfers.",
+                bitpandaDesc: "Austrian exchange, regulated in the EU. Very easy for beginners. Supports card and bank deposits.",
+                binanceLink: "Open Binance",
+                krakenLink: "Open Kraken",
+                bitpandaLink: "Open Bitpanda",
+                back: "← Back"
+            },
+            ru: { 
+                intro: "Перед входом в Solidum вам нужно конвертировать фиат в USDT. Вот проверенные и безопасные места:",
+                stepsTitle: "Как купить USDT:",
+                steps: ["Зарегистрируйтесь на одной из бирж ниже.", "Подтвердите личность (KYC).", "Внесите фиат через банковский перевод или карту.", "Купите USDT (сеть TRC20).", "Выведите USDT на адрес, который даст Solidum."],
+                binanceDesc: "Крупнейшая криптобиржа в мире. Поддерживает депозиты с карты и банковские переводы. Низкие комиссии.",
+                krakenDesc: "Надежная европейская биржа. Поддерживает переводы SEPA в евро. Очень низкие комиссии за банковские переводы.",
+                bitpandaDesc: "Австрийская биржа, регулируемая в ЕС. Очень проста для новичков. Поддерживает депозиты с карты и банковские переводы.",
+                binanceLink: "Открыть Binance",
+                krakenLink: "Открыть Kraken",
+                bitpandaLink: "Открыть Bitpanda",
+                back: "← Назад"
+            },
+            de: { 
+                intro: "Bevor Sie Solidum nutzen, müssen Sie Ihre Fiat-Währung in USDT umwandeln. Hier sind vertrauenswürdige und sichere Orte:",
+                stepsTitle: "So kaufen Sie USDT:",
+                steps: ["Registrieren Sie sich bei einer der untenstehenden Börsen.", "Verifizieren Sie Ihre Identität (KYC).", "Zahlen Sie Fiat per Banküberweisung oder Karte ein.", "Kaufen Sie USDT (TRC20-Netzwerk).", "Heben Sie USDT auf die Adresse ab, die Solidum Ihnen gibt."],
+                binanceDesc: "Die größte Kryptobörse der Welt. Unterstützt Karten- und Bankeinzahlungen. Niedrige Gebühren.",
+                krakenDesc: "Sichere europäische Börse. Unterstützt SEPA-Überweisungen in EUR. Sehr niedrige Gebühren für Banküberweisungen.",
+                bitpandaDesc: "Österreichische Börse, in der EU reguliert. Sehr einfach für Anfänger. Unterstützt Karten- und Bankeinzahlungen.",
+                binanceLink: "Binance öffnen",
+                krakenLink: "Kraken öffnen",
+                bitpandaLink: "Bitpanda öffnen",
+                back: "← Zurück"
+            },
+            fr: { 
+                intro: "Avant d'entrer dans Solidum, vous devez convertir votre monnaie fiduciaire en USDT. Voici des endroits fiables et sécurisés:",
+                stepsTitle: "Comment acheter des USDT:",
+                steps: ["Inscrivez-vous sur l'une des bourses ci-dessous.", "Vérifiez votre identité (KYC).", "Déposez des fonds par virement bancaire ou carte.", "Achetez des USDT (réseau TRC20).", "Retirez les USDT vers l'adresse que Solidum vous donnera."],
+                binanceDesc: "La plus grande bourse crypto au monde. Supporte les dépôts par carte et virement. Frais bas.",
+                krakenDesc: "Bourse européenne sécurisée. Supporte les virements SEPA en EUR. Frais très bas pour les virements bancaires.",
+                bitpandaDesc: "Bourse autrichienne, régulée dans l'UE. Très facile pour les débutants. Supporte les dépôts par carte et virement.",
+                binanceLink: "Ouvrir Binance",
+                krakenLink: "Ouvrir Kraken",
+                bitpandaLink: "Ouvrir Bitpanda",
+                back: "← Retour"
+            }
+        };
+
+        let currentLang = 'bg';
+
+        function setLang(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('intro').innerText = t.intro;
+            document.getElementById('steps-title').innerText = t.stepsTitle;
+            
+            const stepsList = document.getElementById('steps-list');
+            stepsList.innerHTML = '';
+            t.steps.forEach(step => {
+                const li = document.createElement('li');
+                li.innerText = step;
+                stepsList.appendChild(li);
+            });
+
+            document.getElementById('binance-desc').innerText = t.binanceDesc;
+            document.getElementById('kraken-desc').innerText = t.krakenDesc;
+            document.getElementById('bitpanda-desc').innerText = t.bitpandaDesc;
+            document.getElementById('binance-link').innerText = t.binanceLink;
+            document.getElementById('kraken-link').innerText = t.krakenLink;
+            document.getElementById('bitpanda-link').innerText = t.bitpandaLink;
+            document.getElementById('back-btn').innerText = t.back;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang') || 'bg';
+        setLang(lang);
+    </script>
+</body>
+</html>
