@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solidum - Плащане</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: Arial, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #d4af37; font-size: 28px; margin-bottom: 10px; }
+        .payment-container { width: 100%; max-width: 400px; text-align: center; }
+        .price-box { background-color: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #d4af37; margin-bottom: 20px; }
+        .price { font-size: 32px; color: #d4af37; font-weight: bold; margin: 10px 0; }
+        .price-note { font-size: 14px; color: #888; }
+        .address-box { background-color: #1e1e1e; padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 20px; }
+        .address-label { font-size: 14px; color: #888; margin-bottom: 10px; }
+        .address { font-size: 13px; color: #d4af37; font-family: monospace; word-break: break-all; margin-bottom: 10px; }
+        .copy-btn { background: none; border: 1px solid #d4af37; color: #d4af37; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .copy-btn.copied { background-color: #d4af37; color: #121212; }
+        .referral-input { width: 100%; padding: 12px; background-color: #1e1e1e; border: 1px solid #333; border-radius: 8px; color: #e0e0e0; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; }
+        .referral-input::placeholder { color: #666; }
+        .pay-btn { background-color: #d4af37; color: #121212; border: none; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-bottom: 20px; }
+        .pay-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .status { padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; }
+        .status.success { background-color: #1e3a1e; border: 1px solid #4caf50; color: #4caf50; display: block; }
+        .status.error { background-color: #3a1e1e; border: 1px solid #f44336; color: #f44336; display: block; }
+        .status.waiting { background-color: #1e1e3a; border: 1px solid #2196f3; color: #2196f3; display: block; }
+        .back-btn { background: none; border: 1px solid #d4af37; color: #d4af37; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Solidum</h1>
+    </div>
+    
+    <div class="payment-container">
+        <div class="price-box">
+            <p id="price-label">Premium достъп за 1 месец</p>
+            <div class="price" id="price">$1 USDT</div>
+            <p class="price-note" id="price-note">TRC20 мрежа</p>
+        </div>
+
+        <div class="address-box">
+            <p class="address-label" id="address-label">Изпратете точно $1 USDT на този адрес:</p>
+            <p class="address" id="crypto-address">TWKhQbamU7r4C2fKW1uSqfksJBcp2zpyFc</p>
+            <button class="copy-btn" id="copy-btn" onclick="copyAddress()">Копирай адреса</button>
+        </div>
+
+        <input type="text" class="referral-input" id="referral-code" placeholder="Реферален код (по желание)">
+
+        <button class="pay-btn" id="pay-btn" onclick="checkPayment()">Провери плащането</button>
+
+        <div class="status" id="status"></div>
+
+        <button class="back-btn" onclick="window.location.href='index.html'" id="back-btn">← Назад</button>
+    </div>
+
+    <script>
+        const translations = {
+            bg: { priceLabel: "Premium достъп за 1 месец", priceNote: "TRC20 мрежа", addressLabel: "Изпратете точно $1 USDT на този адрес:", referralPlaceholder: "Реферален код (по желание)", payBtn: "Провери плащането", back: "← Назад", success: "✅ Плащането е потвърдено! Достъпът ви е активен за 30 дни.", error: "❌ Плащането не е намерено. Опитайте отново след 1 минута.", waiting: "⏳ Изчакване на плащането...", copy: "Копирай адреса", copied: "Копирано!" },
+            en: { priceLabel: "Premium access for 1 month", priceNote: "TRC20 network", addressLabel: "Send exactly $1 USDT to this address:", referralPlaceholder: "Referral code (optional)", payBtn: "Check payment", back: "← Back", success: "✅ Payment confirmed! Your access is active for 30 days.", error: "❌ Payment not found. Try again in 1 minute.", waiting: "⏳ Waiting for payment...", copy: "Copy address", copied: "Copied!" },
+            ru: { priceLabel: "Premium доступ на 1 месяц", priceNote: "Сеть TRC20", addressLabel: "Отправьте ровно $1 USDT на этот адрес:", referralPlaceholder: "Реферальный код (необязательно)", payBtn: "Проверить платеж", back: "← Назад", success: "✅ Платеж подтвержден! Ваш доступ активен на 30 дней.", error: "❌ Платеж не найден. Попробуйте снова через 1 минуту.", waiting: "⏳ Ожидание платежа...", copy: "Копировать адрес", copied: "Скопировано!" },
+            de: { priceLabel: "Premium-Zugang für 1 Monat", priceNote: "TRC20-Netzwerk", addressLabel: "Senden Sie genau $1 USDT an diese Adresse:", referralPlaceholder: "Empfehlungscode (optional)", payBtn: "Zahlung prüfen", back: "← Zurück", success: "✅ Zahlung bestätigt! Ihr Zugang ist 30 Tage aktiv.", error: "❌ Zahlung nicht gefunden. Versuchen Sie es in 1 Minute erneut.", waiting: "⏳ Warten auf Zahlung...", copy: "Adresse kopieren", copied: "Kopiert!" },
+            fr: { priceLabel: "Accès Premium pour 1 mois", priceNote: "Réseau TRC20", addressLabel: "Envoyez exactement $1 USDT à cette adresse:", referralPlaceholder: "Code de parrainage (optionnel)", payBtn: "Vérifier le paiement", back: "← Retour", success: "✅ Paiement confirmé! Votre accès est actif pendant 30 jours.", error: " Paiement non trouvé. Réessayez dans 1 minute.", waiting: "⏳ En attente du paiement...", copy: "Copier l'adresse", copied: "Copié!" }
+        };
+
+        const YOUR_CRYPTO_ADDRESS = "TWKhQbamU7r4C2fKW1uSqfksJBcp2zpyFc";
+        let currentLang = 'bg';
+
+        function copyAddress() {
+            navigator.clipboard.writeText(YOUR_CRYPTO_ADDRESS).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.innerText = translations[currentLang].copied;
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerText = translations[currentLang].copy;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            document.getElementById('price-label').innerText = t.priceLabel;
+            document.getElementById('price-note').innerText = t.priceNote;
+            document.getElementById('address-label').innerText = t.addressLabel;
+            document.getElementById('referral-code').placeholder = t.referralPlaceholder;
+            document.getElementById('pay-btn').innerText = t.payBtn;
+            document.getElementById('back-btn').innerText = t.back;
+            document.getElementById('copy-btn').innerText = t.copy;
+        }
+
+        async function checkPayment() {
+            const statusDiv = document.getElementById('status');
+            const payBtn = document.getElementById('pay-btn');
+            
+            statusDiv.className = 'status waiting';
+            statusDiv.innerText = translations[currentLang].waiting;
+            payBtn.disabled = true;
+
+            try {
+                // Засега симулираме успех за демонстрация
+                // По-късно ще добавим реална проверка на блокчейна
+                setTimeout(() => {
+                    statusDiv.className = 'status success';
+                    statusDiv.innerText = translations[currentLang].success;
+                    
+                    const expiryDate = new Date();
+                    expiryDate.setDate(expiryDate.getDate() + 30);
+                    localStorage.setItem('solidumPremium', expiryDate.toISOString());
+                    
+                    payBtn.disabled = false;
+                }, 3000);
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.innerText = translations[currentLang].error;
+                payBtn.disabled = false;
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang') || 'bg';
+        setLang(lang);
+
+        const premiumExpiry = localStorage.getItem('solidumPremium');
+        if (premiumExpiry && new Date(premiumExpiry) > new Date()) {
+            document.getElementById('price-label').innerText = "✅ Имате активен Premium достъп";
+            document.getElementById('pay-btn').disabled = true;
+            document.getElementById('pay-btn').innerText = "Активен";
+        }
+    </script>
+</body>
+</html>
