@@ -14,6 +14,7 @@
         .main-text { text-align: center; max-width: 600px; margin-bottom: 40px; font-size: 18px; line-height: 1.5; }
         .buttons { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 300px; }
         .btn { background-color: #d4af37; color: #121212; border: none; padding: 15px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; text-align: center; }
+        .btn-premium { background-color: #1e1e1e; color: #d4af37; border: 2px solid #d4af37; }
         .footer { margin-top: auto; padding-top: 40px; font-size: 12px; color: #888; text-align: center; }
     </style>
 </head>
@@ -33,33 +34,33 @@
         <p id="desc">Превърнете спестяванията си в злато, земя и стабилност – без сложност, дори с малка сума.</p>
     </div>
     <div class="buttons">
-        <!-- Ето тук са добавени правилните връзки -->
         <button class="btn" id="btn1" onclick="window.location.href='guide.html?lang=bg'">🌱 Разбери как работи</button>
         <button class="btn" id="btn2" onclick="window.location.href='calculator.html?lang=bg'">📊 Виж стойността</button>
+        <button class="btn btn-premium" id="btn3" onclick="window.location.href='payment.html?lang=bg'"> Premium - $1/месец</button>
     </div>
     <div class="footer">
         <p id="footer">🔒 Вашите данни са защитени.</p>
     </div>
     <script>
         const translations = {
-            bg: { title: "Вашият сигурен мост към реална стойност.", desc: "Превърнете спестяванията си в злато, земя и стабилност – без сложност, дори с малка сума.", btn1: "🌱 Разбери как работи", btn2: "📊 Виж стойността", footer: "🔒 Вашите данни са защитени." },
-            en: { title: "Your secure bridge to real value.", desc: "Turn your savings into gold, land, and stability – without complexity, even with a small amount.", btn1: "🌱 Understand how it works", btn2: "📊 See the value", footer: "🔒 Your data is protected." },
-            ru: { title: "Ваш надежный мост к реальной ценности.", desc: "Превратите свои сбережения в золото, землю и стабильность – без сложностей, даже с небольшой суммой.", btn1: "🌱 Узнайте, как это работает", btn2: "📊 Оцените ценность", footer: "🔒 Ваши данные защищены." },
-            de: { title: "Ihre sichere Brücke zu echtem Wert.", desc: "Verwandeln Sie Ihre Ersparnisse in Gold, Land und Stabilität – ohne Komplexität, schon mit einem kleinen Betrag.", btn1: "🌱 Verstehen Sie, wie es funktioniert", btn2: "📊 Sehen Sie den Wert", footer: "🔒 Ihre Daten sind geschützt." },
-            fr: { title: "Votre pont sécurisé vers la valeur réelle.", desc: "Transformez vos économies en or, terre et stabilité – sans complexité, même avec un petit montant.", btn1: "🌱 Comprendre comment ça marche", btn2: "📊 Voir la valeur", footer: "🔒 Vos données sont protégées." }
+            bg: { title: "Вашият сигурен мост към реална стойност.", desc: "Превърнете спестяванията си в злато, земя и стабилност – без сложност, дори с малка сума.", btn1: "🌱 Разбери как работи", btn2: "📊 Виж стойността", btn3: "💎 Premium - $1/месец", footer: "🔒 Вашите данни са защитени." },
+            en: { title: "Your secure bridge to real value.", desc: "Turn your savings into gold, land, and stability – without complexity, even with a small amount.", btn1: "🌱 Understand how it works", btn2: "📊 See the value", btn3: "💎 Premium - $1/month", footer: "🔒 Your data is protected." },
+            ru: { title: "Ваш надежный мост к реальной ценности.", desc: "Превратите свои сбережения в золото, землю и стабильность – без сложностей, даже с небольшой суммой.", btn1: "🌱 Узнайте, как это работает", btn2: "📊 Оцените ценность", btn3: "💎 Premium - $1/месяц", footer: "🔒 Ваши данные защищены." },
+            de: { title: "Ihre sichere Brücke zu echtem Wert.", desc: "Verwandeln Sie Ihre Ersparnisse in Gold, Land und Stabilität – ohne Komplexität, schon mit einem kleinen Betrag.", btn1: "🌱 Verstehen Sie, wie es funktioniert", btn2: " Sehen Sie den Wert", btn3: " Premium - $1/Monat", footer: "🔒 Ihre Daten sind geschützt." },
+            fr: { title: "Votre pont sécurisé vers la valeur réelle.", desc: "Transformez vos économies en or, terre et stabilité – sans complexité, même avec un petit montant.", btn1: "🌱 Comprendre comment ça marche", btn2: "📊 Voir la valeur", btn3: "💎 Premium - $1/mois", footer: "🔒 Vos données sont protégées." }
         };
         function setLang(lang) {
             document.getElementById('title').innerText = translations[lang].title;
             document.getElementById('desc').innerText = translations[lang].desc;
             document.getElementById('btn1').innerText = translations[lang].btn1;
             document.getElementById('btn2').innerText = translations[lang].btn2;
+            document.getElementById('btn3').innerText = translations[lang].btn3;
             document.getElementById('footer').innerText = translations[lang].footer;
             document.querySelectorAll('.lang-switch button').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
-            // Актуализираме и връзките при смяна на езика
             document.getElementById('btn1').onclick = function() { window.location.href = 'guide.html?lang=' + lang; };
             document.getElementById('btn2').onclick = function() { window.location.href = 'calculator.html?lang=' + lang; };
+            document.getElementById('btn3').onclick = function() { window.location.href = 'payment.html?lang=' + lang; };
         }
     </script>
 </body>
