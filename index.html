@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solidum - Premium</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: Arial, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { text-align: center; margin-bottom: 30px; }
+        h1 { color: #d4af37; font-size: 28px; margin-bottom: 10px; }
+        .premium-container { width: 100%; max-width: 500px; }
+        .welcome-box { background-color: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #d4af37; margin-bottom: 20px; text-align: center; }
+        .welcome-box h2 { color: #d4af37; margin-top: 0; font-size: 22px; }
+        .expiry-info { font-size: 14px; color: #888; margin-top: 10px; }
+        
+        .section-card { background-color: #1e1e1e; padding: 20px; border-radius: 8px; border: 1px solid #333; margin-bottom: 20px; }
+        .section-card h3 { color: #d4af37; margin-top: 0; font-size: 18px; margin-bottom: 15px; }
+        
+        .calc-input { width: 100%; padding: 12px; background-color: #2a2a2a; border: 1px solid #d4af37; color: #fff; border-radius: 6px; margin-bottom: 15px; box-sizing: border-box; text-align: center; font-size: 18px; font-weight: bold; }
+        .calc-input:focus { outline: none; border-color: #fff; }
+        
+        .link-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background-color: #2a2a2a; border-radius: 6px; margin-bottom: 10px; }
+        .link-item span { font-size: 15px; color: #e0e0e0; }
+        .link-item a { color: #d4af37; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .link-item .val { color: #d4af37; font-weight: bold; font-size: 16px; }
+        
+        .checklist-item { display: flex; align-items: flex-start; margin-bottom: 12px; }
+        .checklist-item input { margin-top: 4px; margin-right: 12px; accent-color: #d4af37; width: 18px; height: 18px; }
+        .checklist-item label { font-size: 14px; color: #ccc; line-height: 1.4; cursor: pointer; }
+        
+        .locked-message { text-align: center; padding: 40px 20px; }
+        .locked-message h2 { color: #d4af37; }
+        .locked-message p { color: #aaa; margin-bottom: 20px; }
+        .locked-btn { background-color: #d4af37; color: #121212; border: none; padding: 15px 30px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .back-btn { background: none; border: 1px solid #d4af37; color: #d4af37; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-size: 16px; display: block; margin: 20px auto 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Solidum</h1>
+    </div>
+    
+    <div class="premium-container" id="premium-content" style="display: none;">
+        <div class="welcome-box">
+            <h2 id="welcome-title">Добре дошли в Premium</h2>
+            <p id="welcome-text">Тук ще намерите моите лични инструменти и правила за сигурност.</p>
+            <p class="expiry-info" id="expiry-info">Вашият абонамент изтича на: --</p>
+        </div>
+
+        <!-- РАЗШИРЕН КАЛКУЛАТОР -->
+        <div class="section-card">
+            <h3 id="calc-title">📊 Разширен калкулатор (5 години)</h3>
+            <p id="calc-desc" style="font-size: 14px; color: #aaa; margin-bottom: 15px;">Въведете сума и вижте реалната разлика между активите.</p>
+            <input type="number" id="calc-amount" class="calc-input" value="1000" oninput="updatePremiumCalc()">
+            
+            <div class="link-item">
+                <span id="calc-bank-name">🏦 Банка (2% лихва)</span>
+                <span class="val" id="calc-bank-val">1100</span>
+            </div>
+            <div class="link-item">
+                <span id="calc-stable-name">💵 Стейбълкоини (5% лихва)</span>
+                <span class="val" id="calc-stable-val">1250</span>
+            </div>
+            <div class="link-item">
+                <span id="calc-gold-name">🥇 Злато / PAXG (7% растеж)</span>
+                <span class="val" id="calc-gold-val" style="font-size: 18px;">1350</span>
+            </div>
+        </div>
+
+        <!-- БЯЛ СПИСЪК -->
+        <div class="section-card">
+            <h3 id="whitelist-title">🛡️ Моят личен бял списък</h3>
+            <p id="whitelist-desc" style="font-size: 14px; color: #aaa; margin-bottom: 15px;">Това са платформите, които аз лично използвам и проверявам.</p>
+            
+            <div class="link-item">
+                <span id="link1-name">Binance (За покупка на USDT)</span>
+                <a href="https://www.binance.com" target="_blank" id="link1-btn">Отвори</a>
+            </div>
+            <div class="link-item">
+                <span id="link2-name">Kraken (За превод в Евро)</span>
+                <a href="https://www.kraken.com" target="_blank" id="link2-btn">Отвори</a>
+            </div>
+            <div class="link-item">
+                <span id="link3-name">Ledger (Личен портфейл)</span>
+                <a href="https://www.ledger.com" target="_blank" id="link3-btn">Отвори</a>
+            </div>
+        </div>
+
+        <!-- ЧЕКЛИСТ -->
+        <div class="section-card">
+            <h3 id="checklist-title">✅ Чеклист за сигурност</h3>
+            <p id="checklist-desc" style="font-size: 14px; color: #aaa; margin-bottom: 15px;">5 правила, които спазвам винаги, преди да натисна "Изпрати".</p>
+            
+            <div class="checklist-item">
+                <input type="checkbox" id="rule1">
+                <label for="rule1" id="rule1-text">Винаги правя тестов превод с малка сума първо.</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="rule2">
+                <label for="rule2" id="rule2-text">Проверявам първите и последните 4 символа на адреса.</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="rule3">
+                <label for="rule3" id="rule3-text">Никога не съхранявам големи суми в борсите.</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="rule4">
+                <label for="rule4" id="rule4-text">Пазя seed фразата си на хартия, никога в телефона.</label>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" id="rule5">
+                <label for="rule5" id="rule5-text">Не кликвам на линкове от непознати в Telegram/Discord.</label>
+            </div>
+        </div>
+
+        <button class="back-btn" onclick="window.location.href='index.html'" id="back-btn">← Назад</button>
+    </div>
+
+    <div class="premium-container" id="locked-content" style="display: none;">
+        <div class="locked-message">
+            <h2 id="locked-title">Premium съдържание</h2>
+            <p id="locked-text">Тази страница е достъпна само за активни абонати.</p>
+            <a href="payment.html" class="locked-btn" id="locked-btn">Активирай за $1</a>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            bg: { 
+                welcomeTitle: "Добре дошли в Premium", 
+                welcomeText: "Тук ще намерите моите лични инструменти и правила за сигурност.",
+                expiryPrefix: "Вашият абонамент изтича на: ",
+                calcTitle: "📊 Разширен калкулатор (5 години)",
+                calcDesc: "Въведете сума и вижте реалната разлика между активите.",
+                calcBankName: "🏦 Банка (2% лихва)",
+                calcStableName: " Стейбълкоини (5% лихва)",
+                calcGoldName: "🥇 Злато / PAXG (7% растеж)",
+                whitelistTitle: "🛡️ Моят личен бял списък",
+                whitelistDesc: "Това са платформите, които аз лично използвам и проверявам.",
+                link1Name: "Binance (За покупка на USDT)", link1Btn: "Отвори",
+                link2Name: "Kraken (За превод в Евро)", link2Btn: "Отвори",
+                link3Name: "Ledger (Личен портфейл)", link3Btn: "Отвори",
+                checklistTitle: "✅ Чеклист за сигурност",
+                checklistDesc: "5 правила, които спазвам винаги, преди да натисна 'Изпрати'.",
+                rule1: "Винаги правя тестов превод с малка сума първо.",
+                rule2: "Проверявам първите и последните 4 символа на адреса.",
+                rule3: "Никога не съхранявам големи суми в борсите.",
+                rule4: "Пазя seed фразата си на хартия, никога в телефона.",
+                rule5: "Не кликвам на линкове от непознати в Telegram/Discord.",
+                lockedTitle: "Premium съдържание",
+                lockedText: "Тази страница е достъпна само за активни абонати.",
+                lockedBtn: "Активирай за $1",
+                back: "← Назад"
+            },
+            en: { 
+                welcomeTitle: "Welcome to Premium", 
+                welcomeText: "Here you will find my personal tools and security rules.",
+                expiryPrefix: "Your subscription expires on: ",
+                calcTitle: "📊 Extended Calculator (5 years)",
+                calcDesc: "Enter an amount and see the real difference between assets.",
+                calcBankName: "🏦 Bank (2% interest)",
+                calcStableName: "💵 Stablecoins (5% interest)",
+                calcGoldName: "🥇 Gold / PAXG (7% growth)",
+                whitelistTitle: "️ My Personal White List",
+                whitelistDesc: "These are the platforms I personally use and verify.",
+                link1Name: "Binance (To buy USDT)", link1Btn: "Open",
+                link2Name: "Kraken (For Euro transfers)", link2Btn: "Open",
+                link3Name: "Ledger (Personal wallet)", link3Btn: "Open",
+                checklistTitle: "✅ Security Checklist",
+                checklistDesc: "5 rules I always follow before hitting 'Send'.",
+                rule1: "I always make a small test transfer first.",
+                rule2: "I check the first and last 4 characters of the address.",
+                rule3: "I never store large amounts on exchanges.",
+                rule4: "I keep my seed phrase on paper, never on my phone.",
+                rule5: "I don't click links from strangers in Telegram/Discord.",
+                lockedTitle: "Premium Content",
+                lockedText: "This page is only accessible to active subscribers.",
+                lockedBtn: "Activate for $1",
+                back: "← Back"
+            },
+            ru: { 
+                welcomeTitle: "Добро пожаловать в Premium", 
+                welcomeText: "Здесь вы найдете мои личные инструменты и правила безопасности.",
+                expiryPrefix: "Ваша подписка истекает: ",
+                calcTitle: "📊 Расширенный калькулятор (5 лет)",
+                calcDesc: "Введите сумму и увидите реальную разницу между активами.",
+                calcBankName: "🏦 Банк (2% годовых)",
+                calcStableName: "💵 Стейблкоины (5% годовых)",
+                calcGoldName: "🥇 Золото / PAXG (7% рост)",
+                whitelistTitle: "🛡️ Мой личный белый список",
+                whitelistDesc: "Это платформы, которые я лично использую и проверяю.",
+                link1Name: "Binance (Для покупки USDT)", link1Btn: "Открыть",
+                link2Name: "Kraken (Для переводов в Евро)", link2Btn: "Открыть",
+                link3Name: "Ledger (Личный кошелек)", link3Btn: "Открыть",
+                checklistTitle: "✅ Чеклист безопасности",
+                checklistDesc: "5 правил, которые я всегда соблюдаю перед нажатием 'Отправить'.",
+                rule1: "Всегда сначала делаю тестовый перевод на небольшую сумму.",
+                rule2: "Проверяю первые и последние 4 символа адреса.",
+                rule3: "Никогда не храню большие суммы на биржах.",
+                rule4: "Храню seed-фразу на бумаге, никогда в телефоне.",
+                rule5: "Не кликаю на ссылки от незнакомцев в Telegram/Discord.",
+                lockedTitle: "Premium контент",
+                lockedText: "Эта страница доступна только активным подписчикам.",
+                lockedBtn: "Активировать за $1",
+                back: "← Назад"
+            },
+            de: { 
+                welcomeTitle: "Willkommen bei Premium", 
+                welcomeText: "Hier finden Sie meine persönlichen Tools und Sicherheitsregeln.",
+                expiryPrefix: "Ihr Abonnement läuft ab am: ",
+                calcTitle: "📊 Erweiterter Rechner (5 Jahre)",
+                calcDesc: "Geben Sie einen Betrag ein und sehen Sie den Unterschied.",
+                calcBankName: " Bank (2% Zinsen)",
+                calcStableName: "💵 Stablecoins (5% Zinsen)",
+                calcGoldName: " Gold / PAXG (7% Wachstum)",
+                whitelistTitle: "🛡️ Meine persönliche Whitelist",
+                whitelistDesc: "Dies sind die Plattformen, die ich persönlich nutze und überprüfe.",
+                link1Name: "Binance (Zum Kauf von USDT)", link1Btn: "Öffnen",
+                link2Name: "Kraken (Für Euro-Überweisungen)", link2Btn: "Öffnen",
+                link3Name: "Ledger (Persönliche Wallet)", link3Btn: "Öffnen",
+                checklistTitle: "✅ Sicherheits-Checkliste",
+                checklistDesc: "5 Regeln, die ich immer befolge, bevor ich auf 'Senden' drücke.",
+                rule1: "Ich mache immer zuerst eine kleine Testüberweisung.",
+                rule2: "Ich überprüfe die ersten und letzten 4 Zeichen der Adresse.",
+                rule3: "Ich bewahre niemals große Beträge auf Börsen auf.",
+                rule4: "Ich bewahre meine Seed-Phrase auf Papier auf, niemals auf dem Handy.",
+                rule5: "Ich klicke nicht auf Links von Fremden in Telegram/Discord.",
+                lockedTitle: "Premium-Inhalte",
+                lockedText: "Diese Seite ist nur für aktive Abonnenten zugänglich.",
+                lockedBtn: "Für $1 aktivieren",
+                back: "← Zurück"
+            },
+            fr: { 
+                welcomeTitle: "Bienvenue dans Premium", 
+                welcomeText: "Ici vous trouverez mes outils personnels et mes règles de sécurité.",
+                expiryPrefix: "Votre abonnement expire le: ",
+                calcTitle: "📊 Calculatrice étendue (5 ans)",
+                calcDesc: "Entrez un montant et voyez la différence réelle entre les actifs.",
+                calcBankName: "🏦 Banque (2% d'intérêt)",
+                calcStableName: "💵 Stablecoins (5% d'intérêt)",
+                calcGoldName: "🥇 Or / PAXG (7% de croissance)",
+                whitelistTitle: "🛡️ Ma liste blanche personnelle",
+                whitelistDesc: "Ce sont les plateformes que j'utilise et vérifie personnellement.",
+                link1Name: "Binance (Pour acheter des USDT)", link1Btn: "Ouvrir",
+                link2Name: "Kraken (Pour les virements en Euros)", link2Btn: "Ouvrir",
+                link3Name: "Ledger (Portefeuille personnel)", link3Btn: "Ouvrir",
+                checklistTitle: "✅ Liste de contrôle de sécurité",
+                checklistDesc: "5 règles que je suis toujours avant d'appuyer sur 'Envoyer'.",
+                rule1: "Je fais toujours d'abord un petit transfert test.",
+                rule2: "Je vérifie les 4 premiers et derniers caractères de l'adresse.",
+                rule3: "Je ne stocke jamais de gros montants sur les exchanges.",
+                rule4: "Je garde ma seed phrase sur papier, jamais sur mon téléphone.",
+                rule5: "Je ne clique pas sur les liens d'inconnus sur Telegram/Discord.",
+                lockedTitle: "Contenu Premium",
+                lockedText: "Cette page n'est accessible qu'aux abonnés actifs.",
+                lockedBtn: "Activer pour $1",
+                back: "← Retour"
+            }
+        };
+
+        let currentLang = 'bg';
+
+        function updatePremiumCalc() {
+            const amount = parseFloat(document.getElementById('calc-amount').value) || 0;
+            // Проста математика за 5 години (лихва върху главницата)
+            document.getElementById('calc-bank-val').innerText = Math.round(amount * 1.10);
+            document.getElementById('calc-stable-val').innerText = Math.round(amount * 1.25);
+            document.getElementById('calc-gold-val').innerText = Math.round(amount * 1.35);
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            document.getElementById('welcome-title').innerText = t.welcomeTitle;
+            document.getElementById('welcome-text').innerText = t.welcomeText;
+            document.getElementById('calc-title').innerText = t.calcTitle;
+            document.getElementById('calc-desc').innerText = t.calcDesc;
+            document.getElementById('calc-bank-name').innerText = t.calcBankName;
+            document.getElementById('calc-stable-name').innerText = t.calcStableName;
+            document.getElementById('calc-gold-name').innerText = t.calcGoldName;
+            document.getElementById('whitelist-title').innerText = t.whitelistTitle;
+            document.getElementById('whitelist-desc').innerText = t.whitelistDesc;
+            document.getElementById('link1-name').innerText = t.link1Name;
+            document.getElementById('link1-btn').innerText = t.link1Btn;
+            document.getElementById('link2-name').innerText = t.link2Name;
+            document.getElementById('link2-btn').innerText = t.link2Btn;
+            document.getElementById('link3-name').innerText = t.link3Name;
+            document.getElementById('link3-btn').innerText = t.link3Btn;
+            document.getElementById('checklist-title').innerText = t.checklistTitle;
+            document.getElementById('checklist-desc').innerText = t.checklistDesc;
+            document.getElementById('rule1-text').innerText = t.rule1;
+            document.getElementById('rule2-text').innerText = t.rule2;
+            document.getElementById('rule3-text').innerText = t.rule3;
+            document.getElementById('rule4-text').innerText = t.rule4;
+            document.getElementById('rule5-text').innerText = t.rule5;
+            document.getElementById('locked-title').innerText = t.lockedTitle;
+            document.getElementById('locked-text').innerText = t.lockedText;
+            document.getElementById('locked-btn').innerText = t.lockedBtn;
+            document.getElementById('back-btn').innerText = t.back;
+            
+            updatePremiumCalc(); // Преизчислява при смяна на езика
+        }
+
+        function checkAccess() {
+            const premiumExpiry = localStorage.getItem('solidumPremium');
+            const t = translations[currentLang];
+            
+            if (premiumExpiry && new Date(premiumExpiry) > new Date()) {
+                document.getElementById('premium-content').style.display = 'block';
+                document.getElementById('locked-content').style.display = 'none';
+                
+                const expiryDate = new Date(premiumExpiry);
+                const formatted = expiryDate.toLocaleDateString(currentLang === 'bg' ? 'bg-BG' : currentLang);
+                document.getElementById('expiry-info').innerText = t.expiryPrefix + formatted;
+                updatePremiumCalc(); // Стартира калкулатора при зареждане
+            } else {
+                document.getElementById('premium-content').style.display = 'none';
+                document.getElementById('locked-content').style.display = 'block';
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang') || 'bg';
+        setLang(lang);
+        checkAccess();
+    </script>
+</body>
+</html>
